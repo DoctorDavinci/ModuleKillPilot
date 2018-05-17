@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine;
 using BDArmory.Core.Module;
+using BDArmory.Control;
+using BDArmory;
 
 namespace ModuleKillPilot
 {
@@ -11,11 +13,12 @@ namespace ModuleKillPilot
          UI_Toggle(scene = UI_Scene.All, disabledText = "", enabledText = "")]
         public bool killPilot = false;
 
-        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true),
-         UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0.0f, maxValue = 1f, stepIncrement = 0.01f)]
+        //        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true),
+        //         UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0.0f, maxValue = 1f, stepIncrement = 0.01f)]
         public float modifier = 0.5f;
 
         private bool killed = false;
+        private float armorCheck = 0.0f;
 
         private ProtoCrewMember kerbal;
 
@@ -39,10 +42,29 @@ namespace ModuleKillPilot
         private void DetectDamage()
         {
             hpTracker = GetHP();
-            if (hpTracker.Armor <= hpTracker.ArmorThickness / modifier)
+            modifier = hpTracker.Armor / hpTracker.ArmorThickness;
+
+            var bullet = GameObject.FindObjectOfType<PooledBullet>();
+
+            if (bullet.hasPenetrated)
             {
-                Kill();
+                if (hpTracker.Armor <= armorCheck)
+                {
+                    armorCheck = hpTracker.Armor;
+                    var random = new System.Random().Next(0, 1);
+
+                    if (random >= modifier)
+                    {
+                        Kill();
+                    }
+                }
             }
+        }
+
+        private void Setup()
+        {
+            hpTracker = GetHP();
+            armorCheck = hpTracker.Armor;
         }
 
         public void Kill()
@@ -68,7 +90,7 @@ namespace ModuleKillPilot
             }
 
             yield return new WaitForFixedUpdate();
-
+            BDAcLock();
             Kill();
         }
 
@@ -79,6 +101,43 @@ namespace ModuleKillPilot
             if (HighLogic.LoadedSceneIsFlight)
             {
                 part.force_activate();
+                Setup();
+
+            }
+        }
+
+        private void BDAcLock()
+        {
+            foreach (Part p in this.vessel.parts)
+            {
+                var wm = vessel.FindPartModuleImplementing<MissileFire>();
+                var PAI = vessel.FindPartModuleImplementing<BDModulePilotAI>();
+                var SAI = vessel.FindPartModuleImplementing<BDModuleSurfaceAI>();
+
+                if (wm != null)
+                {
+                    if (wm.guardMode)
+                    {
+                        wm.guardMode = false;
+                    }
+                }
+
+                if (PAI != null)
+                {
+                    if (PAI.pilotOn)
+                    {
+                        PAI.pilotOn = false;
+                    }
+                }
+
+
+                if (SAI != null)
+                {
+                    if (SAI.pilotOn)
+                    {
+                        SAI.pilotOn = false;
+                    }
+                }
             }
         }
 
@@ -89,6 +148,7 @@ namespace ModuleKillPilot
 
             if (HighLogic.LoadedSceneIsFlight)
             {
+                DetectDamage();
 
                 if (killPilot)
                 {
@@ -96,8 +156,6 @@ namespace ModuleKillPilot
                     {
                         Kill();
                     }
-
-                    DetectDamage();
                 }
             }
         }
