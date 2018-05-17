@@ -1,0 +1,7 @@
+C:\Users\Black Ops\Desktop\MODS 1.4.3\ModuleKillPilot\ModuleKillPilot_Plugin\obj\Debug\ModuleKillPilot.csprojResolveAssemblyReference.cache
+C:\Users\Black Ops\Desktop\MODS 1.4.3\ModuleKillPilot\ModuleKillPilot_Plugin\obj\Debug\ModuleKillPilot.csproj.CoreCompileInputs.cache
+C:\Users\Black Ops\Desktop\MODS 1.4.3\ModuleKillPilot\ModuleKillPilot_Plugin\obj\Debug\ModuleKillPilot.dll
+C:\Users\Black Ops\Desktop\MODS 1.4.3\ModuleKillPilot\ModuleKillPilot_Plugin\obj\Debug\ModuleKillPilot.pdb
+C:\Users\Black Ops\Desktop\MODS 1.4.3\ModuleKillPilot\ModuleKillPilot_Plugin\obj\Debug\KSPAssets.dll
+C:\Users\Black Ops\Desktop\MODS 1.4.3\ModuleKillPilot\ModuleKillPilot_Plugin\obj\Debug\BDArmory.Core.dll
+C:\Users\Black Ops\Desktop\MODS 1.4.3\ModuleKillPilot\ModuleKillPilot_Plugin\obj\Debug\BDArmory.dll
