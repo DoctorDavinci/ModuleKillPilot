@@ -15,7 +15,7 @@ namespace ModuleKillPilot
 
         //        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true),
         //         UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0.0f, maxValue = 1f, stepIncrement = 0.01f)]
-        public float modifier = 0.5f;
+        public float armorModifier = 0.5f;
 
         private bool killed = false;
         private float armorCheck = 0.0f;
@@ -42,7 +42,7 @@ namespace ModuleKillPilot
         private void DetectDamage()
         {
             hpTracker = GetHP();
-            modifier = hpTracker.Armor / hpTracker.ArmorThickness;
+            armorModifier = hpTracker.Armor / hpTracker.ArmorThickness;
 
             var bullet = GameObject.FindObjectOfType<PooledBullet>();
 
@@ -51,9 +51,9 @@ namespace ModuleKillPilot
                 if (hpTracker.Armor <= armorCheck)
                 {
                     armorCheck = hpTracker.Armor;
-                    var random = new System.Random().Next(0, 1);
+                    var random = new System.Random().Next(0, 100);
 
-                    if (random >= modifier)
+                    if (random >= armorModifier * 100)
                     {
                         Kill();
                     }
